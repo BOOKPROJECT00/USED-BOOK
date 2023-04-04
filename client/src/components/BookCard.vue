@@ -18,14 +18,24 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-const props: any = defineProps({
-  category: String,
-  imgPath: String,
-  title: String,
-  author: String,
-});
+// "타입 기반 선언(type-based declaration)"이라고 합니다. 컴파일러는 타입 전달인자를 기반으로 같은 런타임 옵션을 추론 하도록 시도합니다
+const props = defineProps<{
+  category: string;
+  imgPath: string;
+  title: string;
+  author: string;
+}>();
 
-const validateString = (targetString, targetIndex, seperator) => {
+// defineProps()에 전달된 인자가 런타임 props 옵션으로 사용되기 때문에 이것을 "런타임 선언(runtime declaration)"이라고 합니다.
+// const props = defineProps({
+//   category: String,
+//   imgPath: String,
+//   title: String,
+//   author: String,
+// });
+
+// prettier-ignore
+const convertString = (targetString: string, targetIndex: number, seperator: string): string => {
   if (targetString === undefined) {
     return "no-data";
   }
@@ -35,10 +45,8 @@ const validateString = (targetString, targetIndex, seperator) => {
   return targetString.split(seperator)[targetIndex];
 };
 
-const convertedCategory = computed(() =>
-  validateString(props.category, 1, ">")
-);
-const convertedTitle = computed(() => validateString(props.title, 0, "-"));
+const convertedCategory = computed(() => convertString(props.category, 1, ">"));
+const convertedTitle = computed(() => convertString(props.title, 0, "-"));
 </script>
 
 <style scoped>
